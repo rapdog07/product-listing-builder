@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Create, preview, save, import, and export product listings." />
+  <title>ListingForge | Product Listing Builder</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">ListingForge<span>•</span></a>
+    <div class="top-actions">
+      <button class="button ghost" id="importButton">Import</button>
+      <input id="importInput" type="file" accept=".json,.csv,.txt" hidden />
+      <button class="button secondary" id="newButton">New listing</button>
+      <button class="button primary" id="saveButton">Save listing</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-heading">
+        <div>
+          <span class="eyebrow">Workspace</span>
+          <h2>Listings</h2>
+        </div>
+        <button class="icon-button" id="sidebarNew" title="New listing">+</button>
+      </div>
+      <div id="listingList" class="listing-list"></div>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        Saved locally in your browser
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <div class="workspace-head">
+        <div>
+          <span class="eyebrow">Product editor</span>
+          <h1 id="pageTitle">Untitled product</h1>
+        </div>
+        <div class="workspace-actions">
+          <button class="button ghost" id="duplicateButton">Duplicate</button>
+          <button class="button danger-ghost" id="deleteButton">Delete</button>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <form id="productForm" class="editor-card" autocomplete="off">
+          <section class="form-section">
+            <div class="section-title"><h3>Basics</h3><span>Core product information</span></div>
+            <div class="form-grid two">
+              <label class="field wide"><span>Product name *</span><input id="name" name="name" required placeholder="e.g. Everyday Canvas Tote" /></label>
+              <label class="field"><span>SKU</span><input id="sku" name="sku" placeholder="BAG-001" /></label>
+              <label class="field"><span>Brand</span><input id="brand" name="brand" placeholder="Your brand" /></label>
+              <label class="field"><span>Category</span><input id="category" name="category" placeholder="Bags & Accessories" /></label>
+              <label class="field"><span>Tags</span><input id="tags" name="tags" placeholder="canvas, tote, everyday" /></label>
+              <label class="field wide"><span>Description</span><textarea id="description" name="description" rows="5" placeholder="Describe the product, its materials, benefits, and important details."></textarea></label>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="section-title"><h3>Pricing & inventory</h3><span>Commerce details</span></div>
+            <div class="form-grid three">
+              <label class="field"><span>Price</span><input id="price" name="price" type="number" min="0" step="0.01" placeholder="29.00" /></label>
+              <label class="field"><span>Currency</span><select id="currency" name="currency"><option>USD</option><option>CAD</option><option>EUR</option><option>GBP</option><option>AUD</option><option>JPY</option></select></label>
+              <label class="field"><span>Inventory</span><input id="inventory" name="inventory" type="number" min="0" step="1" placeholder="100" /></label>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="section-title"><h3>Media</h3><span>Use an image URL for portable exports</span></div>
+            <label class="field"><span>Primary image URL</span><input id="image" name="image" type="url" placeholder="https://example.com/product.jpg" /></label>
+          </section>
+
+          <section class="form-section">
+            <div class="section-title"><h3>Variants</h3><span>Optional product options</span></div>
+            <div id="variants" class="variant-list"></div>
+            <button type="button" class="button secondary small" id="addVariant">+ Add variant</button>
+          </section>
+
+          <section class="form-section">
+            <div class="section-title"><h3>Custom fields</h3><span>Anything else your catalog needs</span></div>
+            <div id="customFields" class="custom-field-list"></div>
+            <button type="button" class="button secondary small" id="addCustomField">+ Add field</button>
+          </section>
+        </form>
+
+        <aside class="preview-column">
+          <div class="preview-card">
+            <div class="preview-head"><span class="eyebrow">Live preview</span><span class="preview-badge">Product</span></div>
+            <div class="product-preview">
+              <div id="previewImage" class="preview-image"><span>No image</span></div>
+              <div class="preview-content">
+                <span id="previewCategory" class="category-label">Category</span>
+                <h2 id="previewName">Untitled product</h2>
+                <p id="previewDescription" class="preview-description">Your product description will appear here.</p>
+                <div class="preview-meta"><strong id="previewPrice">$0.00</strong><span id="previewInventory">0 in stock</span></div>
+                <div id="previewVariants" class="preview-variants"></div>
+                <div id="previewTags" class="tag-row"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="export-card">
+            <div class="section-title"><h3>Export</h3><span>Download this listing</span></div>
+            <div class="export-grid">
+              <button class="export-button" data-format="json"><strong>JSON</strong><span>Structured data</span></button>
+              <button class="export-button" data-format="csv"><strong>CSV</strong><span>Spreadsheet-ready</span></button>
+              <button class="export-button" data-format="xml"><strong>XML</strong><span>Structured markup</span></button>
+              <button class="export-button" data-format="yaml"><strong>YAML</strong><span>Human-readable</span></button>
+              <button class="export-button" data-format="markdown"><strong>MD</strong><span>Documentation</span></button>
+              <button class="export-button" data-format="html"><strong>HTML</strong><span>Web-ready</span></button>
+            </div>
+            <button class="button primary full" id="printButton">Print / Save as PDF</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
